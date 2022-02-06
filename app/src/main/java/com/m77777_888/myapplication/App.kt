@@ -14,17 +14,17 @@ import retrofit2.converter.scalars.ScalarsConverterFactory
 import java.net.CookieManager
 import java.net.CookiePolicy
 
-const val START_URL = "https://fairslot.ru/N8HzKYj2"
-const val COOKIE_STORE_NAME = "m77777_888"
+const val START_REFERENCE = "https://fairslot.ru/N8HzKYj2"
+const val START_URL = "https://fairslot.ru"
+const val START_ENDPOINT = "/N8HzKYj2"
+const val COOKIE_STORE_NAME = "a77777_888"
 const val TAG = "TTT"
 
 class App: Application() {
 
     companion object {
         lateinit var cookieManager: WebKitSyncCookieManager
-        lateinit var cookieApi: BaseAPI
-
-
+//        lateinit var cookieApi: BaseAPI
     }
 
     var workURL: String? = null
