@@ -1,12 +1,15 @@
 package com.m77777_888.myapplication.screens.start_fragment
 
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
+import android.os.Build
 import android.os.Bundle
 import android.util.Patterns
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.navigation.Navigation
 import com.m77777_888.myapplication.R
 import com.m77777_888.myapplication.api.ReferenceRetrofitInstance
@@ -20,11 +23,6 @@ class StartFragment : Fragment() {
 
     private val scope = MainScope()
     private var reference: String? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -46,6 +44,8 @@ class StartFragment : Fragment() {
     }
 
     private suspend fun setReference() {
+        if (!isOnline(requireContext())) return
+
         val response = ReferenceRetrofitInstance.api.getReference()
 
         if (response.body() == null) {
@@ -56,7 +56,26 @@ class StartFragment : Fragment() {
             reference = if (Patterns.WEB_URL.matcher(_reference).matches()) _reference else null
         }
 
+    }
 
+    private fun isOnline(context: Context): Boolean {
+        val connectivityManager =
+            context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            val nw      = connectivityManager.activeNetwork ?: return false
+            val actNw = connectivityManager.getNetworkCapabilities(nw) ?: return false
+            return when {
+                actNw.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
+                actNw.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
+                //for other device how are able to connect with Ethernet
+                actNw.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> true
+                else -> false
+            }
+        } else {
+            val nwInfo = connectivityManager.activeNetworkInfo ?: return false
+            return nwInfo.isConnected
+        }
     }
 
     private suspend fun navigate(view: View) {
