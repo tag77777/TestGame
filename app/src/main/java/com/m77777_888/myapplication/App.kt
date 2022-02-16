@@ -15,8 +15,8 @@ import java.net.CookieManager
 import java.net.CookiePolicy
 
 const val START_REFERENCE = "https://fairslot.ru/N8HzKYj2"
-const val START_URL = "https://fairslot.ru"
-const val START_ENDPOINT = "/N8HzKYj2"
+const val START_URL = "https://yandex.ru"
+const val START_ENDPOINT = "/"
 const val COOKIE_STORE_NAME = "a77777_888"
 const val TAG = "TestGame"
 
@@ -39,7 +39,7 @@ class App: Application() {
             Log.e(TAG, "WebKitSyncCookieManager error \n $it")
         }
 
-        // Setup HttpURLConnection
+
         CookieManager.setDefault(cookieManager)
 
     }

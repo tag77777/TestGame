@@ -13,3 +13,5 @@
 .externalNativeBuild
 .cxx
 local.properties
+install.sh
+stopDebug.sh
